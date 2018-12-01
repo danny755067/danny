@@ -22,14 +22,10 @@ int parent[1000001];
 int parent_number;
 int visit_or_not[1000001];
 int print_m[1000001],print_n[1000001];
-int total_print_m[30000000],total_print_n[30000000];
+int total_print_m[3000000],total_print_n[3000000];
 int k = 0,h=0;
 int g=0;
-int howmanyson[1000000];
-int lastone[1000000];
-int store[1000000];
-int c;
-int record;
+
 
 int scan_the_location(int m, int n)
 {
@@ -52,7 +48,7 @@ void tree(int m , int n,int l)
 
             number=scan_the_location( m+1,  n);
 
-            if(visit_or_not[number]==0)
+            if(visit_or_not[number]==0&&l+1<=battery/2)
             {
 
                 visit_or_not[number]=1;
@@ -67,7 +63,7 @@ void tree(int m , int n,int l)
         {
             number=scan_the_location( m-1,  n);
 
-            if(visit_or_not[number]==0)
+            if(visit_or_not[number]==0&&l+1<=battery/2)
             {
                 visit_or_not[number]=1;
                 level[number]=l+1;
@@ -81,7 +77,7 @@ void tree(int m , int n,int l)
         {
             number=scan_the_location(m, n+1);
 
-            if(visit_or_not[number]==0)
+            if(visit_or_not[number]==0&&l+1<=battery/2)
             {
                 visit_or_not[number]=1;
                 level[number]=l+1;
@@ -93,7 +89,7 @@ void tree(int m , int n,int l)
         {
             number=scan_the_location( m,  n-1);
 
-            if(visit_or_not[number]==0)
+            if(visit_or_not[number]==0&&l+1<=battery/2)
             {
                 visit_or_not[number]=1;
                 level[number]=l+1;
@@ -103,13 +99,13 @@ void tree(int m , int n,int l)
 
         }
     }
-    else if(l!=0&&l+1<=battery/2)
+    else
     {
         if(cleanmap[m+1][n]==0)
         {
 
             number=scan_the_location( m+1,  n);
-            if(visit_or_not[number]==0)
+            if(visit_or_not[number]==0&&l+1<=battery/2)
             {
                 visit_or_not[number]=1;
                 level[number]=l+1;
@@ -125,7 +121,7 @@ void tree(int m , int n,int l)
 
             number=scan_the_location(m-1, n);
 
-            if(visit_or_not[number]==0)
+            if(visit_or_not[number]==0&&l+1<=battery/2)
             {
                 visit_or_not[number]=1;
                 level[number]=l+1;
@@ -140,7 +136,7 @@ void tree(int m , int n,int l)
 
             number=scan_the_location( m,  n+1);
 
-            if(visit_or_not[number]==0)
+            if(visit_or_not[number]==0&&l+1<=battery/2)
             {
                 visit_or_not[number]=1;
                 level[number]=l+1;
@@ -155,7 +151,7 @@ void tree(int m , int n,int l)
 
             number=scan_the_location( m,  n-1);
 
-            if(visit_or_not[number]==0)
+            if(visit_or_not[number]==0&&l+1<=battery/2)
             {
                 visit_or_not[number]=1;
                 level[number]=l+1;
@@ -169,63 +165,58 @@ void tree(int m , int n,int l)
     }
 
 }
-void clean(void)
+int clean(int p)
 {
 
-    for(int q=0;q<total;q++)
+    int q=0;
+    for(int i=0;i<total;i++)
     {
-        for(int f=0;f<total;f++)
+
+        if(parent[i]==p)
         {
-            if(parent[f]==q)
+
+            q = q+1;
+            print_m[k]=space_m[i];
+            print_n[k]=space_n[i];
+            k++;
+            clean(i);
+
+        }
+        else if(i==total-1&&parent[i]!=p)
+        {
+
+            for(int j=g;j<k-1;j++)
             {
-                howmanyson[g]=howmanyson[g]+1;
+                total_print_m[h] = print_m[j] ;
+                total_print_n[h] = print_n[j];
+                total_length =total_length+1;
+                h++;
             }
-            else if(f==total-1&&parent[f]!=q&&howmanyson[g]==0)
+
+            total_print_m[h] = print_m[k-1] ;
+            total_print_n[h] = print_n[k-1] ;
+            h++;
+            total_length =total_length+1;
+            for( int j = k-2;j>=g;j--)
             {
-                lastone[k]=q;
-                k++;
+                total_print_m[h] = print_m[j] ;
+                total_print_n[h] = print_n[j];
+               total_length =total_length+1;
+                h++;
             }
-        }
-        g++;
-    }
-    for(int i=0; i<k;i++)
-    {
-        c=0;
 
-        record=lastone[i];
-        while(parent[record]!=1000000)
-        {
-            store[c]=parent[record];
-            record=parent[record];
-            c++;
-
-
-
-        }
-        for(int j=c-1;j>=0;j--)
-        {
-            total_print_m[h]=space_m[store[j]];
-            total_print_n[h]=space_n[store[j]];
+            total_print_m[h] = space_m[1000000] ;
+            total_print_n[h] = space_n[1000000] ;
+            total_length =total_length+1;
             h++;
-            total_length++;
+            k--;
+
+
         }
-        total_print_m[h]=space_m[lastone[i]];
-        total_print_n[h]=space_n[lastone[i]];
-        h++;
-        total_length++;
-        for(int j=0;j<c;j++)
-        {
-            total_print_m[h]=space_m[store[j]];
-            total_print_n[h]=space_n[store[j]];
-            h++;
-            total_length++;
-        }
-        total_print_m[h] = space_m[1000000] ;
-        total_print_n[h] = space_n[1000000] ;
-        total_length++;
-        h++;
+
 
     }
+
 }
 
 int main(int argc, char *argv[])
@@ -273,7 +264,6 @@ int main(int argc, char *argv[])
                 cleanmap[m][n]=temp;
                 Cpoint_m[0] = m ;
                 Cpoint_n[0] = n ;
-
             }
             else if(cmd=='0')
             {
@@ -294,19 +284,18 @@ int main(int argc, char *argv[])
 
     }
 
-    int p;
+      int p;
 
     now_m = Cpoint_m[0];
     now_n = Cpoint_n[0];
     battery = m_n_b[2];
-
     space_m[1000000]=Cpoint_m[0];
     space_n[1000000]=Cpoint_n[0];
 
     parent[1000000]=-1;
     tree(now_m, now_n,0);
 
-    clean();
+    clean(1000000);
     fout << total_length << endl;
 
     for( p=0;p<total_length;p++)
