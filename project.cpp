@@ -14,7 +14,7 @@ int k =0;
 int main(int argc, char *argv[])
 {
     stringstream str1;
-    str1 <<  argv[1] << "/matrix.data";
+    str1 << "./" << argv[1] << "/matrix.data";
 
     ifstream fin;
     fin.open(str1.str());
@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
     }
 
     stringstream str2;
-    str2<<argv[1] << "/final.peak";
+    str2<< "./" << argv[1] << "/final.peak";
 
     ofstream fout;
     fout.open(str2.str());
